@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+    container_name: 'web'
+    volumes:
+      - ./:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - 5000:5000
+    environment:
+      - APP_PORT=5000
+      - APP_PG_CONNECT=postgresql://postgres:postgres@postgres:5432/postgres
+    command: npm run start
+
+  postgres:
+    image: postgres:13
+    ports:
+      - 15432:5432
+    container_name: 'postgres'
+    restart: always
+    environment:
+      POSTGRES_DB: 'postgres'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - dump:/usr/src/app/dump
+      - postgresql:/var/lib/postgresql/data
+
+volumes:
+  node_modules:
+  postgresql:
+  dump:
