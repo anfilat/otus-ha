@@ -5,6 +5,10 @@ module.exports = function setupAPI(app) {
         bodyParser.json({extended: true}),
     );
 
+    app.use('/api/v1',
+        require('./routes/api.routes')
+    );
+
     app.get('/health',
         handlerHealth
     );

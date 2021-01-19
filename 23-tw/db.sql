@@ -1,16 +1,13 @@
 create table "user" (
     id bigserial not null constraint user_pkey primary key,
-    login varchar(32) not null,
-    created_at timestamp(0) not null,
-    updated_at timestamp(0) default NULL::timestamp without time zone
+    login varchar(32) not null
 );
 
 create table tweet (
     id bigserial not null constraint tweet_pkey primary key,
     author_id bigint constraint fk_3d660a3bf675f31b references "user",
     text varchar(140) not null,
-    created_at timestamp(0) not null,
-    updated_at timestamp(0) default NULL::timestamp without time zone
+    created_at timestamp not null default now()
 );
 
 create index idx_3d660a3bf675f31b on tweet (author_id);
@@ -18,9 +15,7 @@ create index idx_3d660a3bf675f31b on tweet (author_id);
 create table subscription (
     id bigserial not null constraint subscription_pkey primary key,
     author_id bigint constraint fk_a3c664d3f675f31b references "user",
-    follower_id bigint constraint fk_a3c664d3ac24f853 references "user",
-    created_at timestamp(0) not null,
-    updated_at timestamp(0) default NULL::timestamp without time zone
+    follower_id bigint constraint fk_a3c664d3ac24f853 references "user"
 );
 
 create index idx_a3c664d3f675f31b on subscription (author_id);
@@ -31,9 +26,7 @@ create index idx_a3c664d3ac24f853f675f31b on subscription (follower_id, author_i
 create table feed (
     id bigserial not null constraint feed_pkey primary key,
     reader_id bigint constraint fk_234044ab1717d737 references "user",
-    tweets json,
-    created_at timestamp(0) not null,
-    updated_at timestamp(0) default NULL::timestamp without time zone
+    tweets json
 );
 
 comment on column feed.tweets is '(DC2Type:json_array)';
