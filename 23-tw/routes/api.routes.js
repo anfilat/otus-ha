@@ -1,8 +1,8 @@
 const {Router} = require('express');
-const apiUser = require('../api/user');
-const apiSubscription = require('../api/subscription');
-const apiFeed = require('../api/feed');
-const apiTweet = require('../api/tweet');
+const apiUser = require('../endpoints/user');
+const apiSubscription = require('../endpoints/subscription');
+const apiFeed = require('../endpoints/feed');
+const apiTweet = require('../endpoints/tweet');
 const {stopOnError} = require('./util');
 
 const router = Router();
