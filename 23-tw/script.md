@@ -2,10 +2,6 @@
 1. Зайти в контейнер `web` командой `docker exec -it web sh`. В дальнейшем все команды выполняются в контейнере, если
    явно не указано иное
 1. Создать схему БД командой `npm run updatedb`
-1. Зайти в контейнер `rabbit-mq` командой `docker exec -it rabbit-mq sh` и выполнить в нём команду
-    ```shell script
-    rabbitmq-plugins enable rabbitmq_consistent_hash_exchange
-    ```
 1. Послать запрос `Add user` из коллекции Postman, проверить, что возвращается `success: true` и идентификатор
    пользователя
 1. Для проверки скорости запросов добавить 1000 фолловеров из постмана `Add followers`

@@ -1,6 +1,6 @@
 const timersPromises = require('timers/promises');
 const amqp = require('amqplib');
-const {exchange} = require('./common');
+const {exchangePublish, exchangeUpdateFeed} = require('./common');
 
 let conn;
 let channel;
@@ -8,7 +8,7 @@ let ok;
 
 async function init() {
     let data;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 25; i++) {
         data = await connect();
         if (data.err) {
             await timersPromises.setTimeout(500);
@@ -28,16 +28,24 @@ async function connect() {
     try {
         const conn = await amqp.connect(process.env.APP_RABBITMQ);
         const channel = await conn.createChannel();
-        const ok = channel.assertExchange(exchange, 'direct', {durable: false});
-        return {conn, channel, ok};
+        await channel.assertExchange(exchangePublish, 'direct', {durable: false});
+        await channel.assertExchange(exchangeUpdateFeed, 'x-consistent-hash', {durable: false});
+
+        return {conn, channel, ok: Promise.resolve()};
     } catch (err) {
         return {err};
     }
 }
 
-function publish(message) {
+function publishTweet(message) {
     ok = ok.then(() => {
-        channel.publish(exchange, 'tweet.published', Buffer.from(message));
+        return channel.publish(exchangePublish, 'tweet.published', Buffer.from(message));
+    });
+}
+
+function publishUpdateFeed(message, routingKey) {
+    ok = ok.then(() => {
+        return channel.publish(exchangeUpdateFeed, routingKey, Buffer.from(message));
     });
 }
 
@@ -53,5 +61,6 @@ async function close() {
 module.exports = {
     init,
     close,
-    publish,
+    publishTweet,
+    publishUpdateFeed,
 }

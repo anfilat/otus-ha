@@ -26,7 +26,7 @@ async function saveTweetAsync(authorId, text) {
         return null;
     }
 
-    amqpProducer.publish(tweet.toAMPQMessage());
+    amqpProducer.publishTweet(tweet.toAMPQMessage());
 
     return true;
 }

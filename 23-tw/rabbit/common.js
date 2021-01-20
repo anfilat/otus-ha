@@ -1,5 +1,7 @@
-const exchange = 'tweet.published';
+const exchangePublish = 'tweet.published';
+const exchangeUpdateFeed = 'update_feed.received';
 
 module.exports = {
-    exchange,
+    exchangePublish,
+    exchangeUpdateFeed,
 };

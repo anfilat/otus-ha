@@ -28,7 +28,9 @@ services:
       POSTGRES_PASSWORD: 'postgres'
 
   rabbitmq:
-    image: rabbitmq:3.8.10-management
+    build:
+      context: .
+      dockerfile: Dockerfile-rabbitmq
     container_name: 'rabbit-mq'
     ports:
       - 15672:15672
