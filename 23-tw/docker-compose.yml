@@ -12,6 +12,7 @@ services:
     environment:
       - APP_PORT=5000
       - APP_PG_CONNECT=postgresql://postgres:postgres@postgres:5432/postgres
+      - APP_RABBITMQ=amqp://user:password@rabbit-mq:5672
 
   postgres:
     image: postgres:13
@@ -25,6 +26,34 @@ services:
       POSTGRES_DB: 'postgres'
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
+
+  rabbitmq:
+    image: rabbitmq:3.8.10-management
+    container_name: 'rabbit-mq'
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    container_name: 'graphite'
+    ports:
+      - 8000:80
+      - 2003:2003
+      - 2004:2004
+      - 2023:2023
+      - 2024:2024
+      - 8125:8125/udp
+      - 8126:8126
+
+  grafana:
+    image: grafana/grafana
+    container_name: 'grafana'
+    ports:
+      - 3000:3000
 
 volumes:
   node_modules:

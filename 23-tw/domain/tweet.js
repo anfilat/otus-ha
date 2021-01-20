@@ -1,5 +1,6 @@
 const db = require('../db');
 const {putTweet} = require('./feed');
+const amqpProducer = require('../rabbitProducer');
 
 async function save(authorId, text, async) {
     return (async ?
@@ -25,7 +26,7 @@ async function saveTweetAsync(authorId, text) {
         return null;
     }
 
-    // TODO
+    amqpProducer.publish(tweet.toAMPQMessage());
 
     return true;
 }
@@ -35,7 +36,6 @@ async function spreadTweet(tweet) {
     for (let id of followerIds) {
         await putTweet(tweet, id);
     }
-    //await Promise.all(followerIds.map(id => putTweet(tweet, id)));
 }
 
 async function saveTweet(authorId, text) {

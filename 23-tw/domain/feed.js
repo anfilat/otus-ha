@@ -12,18 +12,9 @@ async function putTweet(tweet, followerId) {
         return false;
     }
 
-    tweets.push(tweetToFeed(tweet))
+    tweets.push(tweet.toFeed());
     await db.saveFeed(followerId, tweets);
     return true;
-}
-
-function tweetToFeed(tweet) {
-    return {
-        id: tweet.id,
-        author: tweet.author.login,
-        text: tweet.text,
-        createdAt: tweet.createdAt.toISOString()
-    };
 }
 
 module.exports = {

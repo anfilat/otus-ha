@@ -1,4 +1,5 @@
 const {get} = require('./core');
+const {Tweet} = require('../entity/tweet');
 
 async function addTweet(author, text) {
     const sql = `
@@ -8,12 +9,7 @@ async function addTweet(author, text) {
     `;
     const values = [author.id, text];
     const data = await get(sql, values);
-    return {
-        id: data.id,
-        author: author,
-        text: text,
-        createdAt: data.created_at,
-    }
+    return new Tweet(data.id, author, text, data.created_at);
 }
 
 module.exports = {
