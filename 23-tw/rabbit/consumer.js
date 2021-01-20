@@ -2,6 +2,7 @@ const timersPromises = require('timers/promises');
 const amqp = require('amqplib');
 const {exchangePublish, exchangeUpdateFeed} = require('./common');
 const amqpProducer = require('./producer');
+const metrics = require('../graphite');
 const db = require('../db');
 const {putTweet} = require('../domain/feed');
 
@@ -54,7 +55,7 @@ async function addPublishConsumer(channel) {
 async function addUpdateFeedConsumer(channel, ind) {
     const queue = (await channel.assertQueue(`consumer.update_feed.received-${ind}`, {exclusive: true})).queue;
     await channel.bindQueue(queue, exchangeUpdateFeed, '1');
-    await channel.consume(queue, onUpdateFeed, {noAck: false});
+    await channel.consume(queue, onUpdateFeed.bind(null, ind), {noAck: false});
 }
 
 async function onTweet(msg) {
@@ -71,14 +72,14 @@ async function onTweet(msg) {
             amqpProducer.publishUpdateFeed(JSON.stringify({tweetId, recipientId}), recipientId);
         }
 
-        channel.ack(msg);
+        await channel.ack(msg);
     } catch (err) {
         console.log('Incorrect message:', err);
-        channel.nack(msg);
+        await channel.nack(msg);
     }
 }
 
-async function onUpdateFeed(msg) {
+async function onUpdateFeed(ind, msg) {
     try {
         const {tweetId, recipientId} = JSON.parse(msg.content.toString());
         const tweet = await db.getTweet(tweetId);
@@ -88,11 +89,12 @@ async function onUpdateFeed(msg) {
         }
 
         await putTweet(tweet, recipientId);
+        metrics.increment(`update_feed_received_${ind}`);
 
-        channel.ack(msg);
+        await channel.ack(msg);
     } catch (err) {
         console.log('Incorrect message:', err);
-        channel.nack(msg);
+        await channel.nack(msg);
     }
 }
 
