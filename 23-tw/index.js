@@ -1,6 +1,7 @@
 const initApp = require('./app');
 const db = require('./db');
-const amqpProducer = require('./rabbitProducer');
+const amqpProducer = require('./rabbit/producer');
+const amqpConsumer = require('./rabbit/consumer');
 
 (async function () {
     const app = await initApp();
@@ -26,7 +27,8 @@ const amqpProducer = require('./rabbitProducer');
             .then(() => {
                 return Promise.all([
                     closeDb(),
-                    closeAmqpProducer()
+                    closeAmqpProducer(),
+                    closeAmqpConsumer(),
                 ]);
             })
             .finally(() => {
@@ -58,6 +60,11 @@ function closeDb() {
 }
 
 async function closeAmqpProducer() {
-    await amqpProducer.closeProducer();
+    await amqpProducer.close();
     console.log('RabbitMQ Producer closed.');
+}
+
+async function closeAmqpConsumer() {
+    await amqpConsumer.close();
+    console.log('RabbitMQ Consumer closed.');
 }

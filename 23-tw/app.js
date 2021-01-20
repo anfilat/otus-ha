@@ -4,7 +4,8 @@ const morgan = require('morgan');
 require('dotenv').config();
 const setupAPI = require('./app.api');
 const db = require('./db');
-const amqpProducer = require('./rabbitProducer');
+const amqpProducer = require('./rabbit/producer');
+const amqpConsumer = require('./rabbit/consumer');
 
 async function init() {
     const app = express();
@@ -14,7 +15,8 @@ async function init() {
     app.use(morgan('common'));
 
     db.initDb();
-    await amqpProducer.initProducer();
+    await amqpProducer.init();
+    await amqpConsumer.init();
 
     setupAPI(app);
 

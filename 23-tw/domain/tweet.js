@@ -1,6 +1,6 @@
 const db = require('../db');
 const {putTweet} = require('./feed');
-const amqpProducer = require('../rabbitProducer');
+const amqpProducer = require('../rabbit/producer');
 
 async function save(authorId, text, async) {
     return (async ?
