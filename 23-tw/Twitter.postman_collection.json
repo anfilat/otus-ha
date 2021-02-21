@@ -9,23 +9,15 @@
 			"name": "Add user",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
+				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "login",
-							"value": "my_user",
-							"type": "text"
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"my_user\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
+					}
 				},
 				"url": {
 					"raw": "{{host}}/api/v1/user",
@@ -48,7 +40,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"authorId\": 1,\n    \"count\": 1000\n}",
+					"raw": "{\n    \"authorId\": 1,\n    \"count\": 10000\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -151,186 +143,6 @@
 						"subscription"
 					]
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user list",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/v1/user?perPage=3&page=0",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"user"
-					],
-					"query": [
-						{
-							"key": "perPage",
-							"value": "3"
-						},
-						{
-							"key": "page",
-							"value": "0"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Patch user",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "login",
-							"value": "my_user_new_login",
-							"type": "text"
-						},
-						{
-							"key": "userId",
-							"value": "3",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/user",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete user",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/v1/user?userId=3",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"user"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "3"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get followers",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/v1/subscription/list-by-author?authorId=1",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"subscription",
-						"list-by-author"
-					],
-					"query": [
-						{
-							"key": "authorId",
-							"value": "1"
-						}
-					]
-				},
-				"description": "Get subscriptions by authorId"
-			},
-			"response": []
-		},
-		{
-			"name": "Get authors for feed",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"authorId\":1,\n\t\"text\": \"Game of Thrones\"\n}"
-				},
-				"url": {
-					"raw": "{{host}}/api/v1/subscription/list-by-follower?followerId=5",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"subscription",
-						"list-by-follower"
-					],
-					"query": [
-						{
-							"key": "followerId",
-							"value": "5"
-						}
-					]
-				},
-				"description": "Get subscriptions by followerId"
 			},
 			"response": []
 		}
